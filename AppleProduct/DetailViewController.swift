@@ -8,15 +8,24 @@
 
 import UIKit
 
+protocol changeTitleBarDelegate {
+    func changeTitleBar(_ string: String)
+}
+
 class DetailViewController: UIViewController {
     
     var product = Product()
+    var titleText = ""
 
+    @IBOutlet weak var titleTextBar: UITextField!
+    
     @IBOutlet weak var detailImageView: UIImageView!
     
     @IBOutlet weak var nameTextField: UITextField!
     
     @IBOutlet weak var dateTextField: UITextField!
+    
+    var delegate : changeTitleBarDelegate?
     
     @IBAction func wikiButton(_ sender: Any) {
         let string = product.url!
@@ -33,12 +42,15 @@ class DetailViewController: UIViewController {
         if sender.titleLabel?.text == "Edit" {
             nameTextField.isEnabled = true
             dateTextField.isEnabled = true
+            titleTextBar.isEnabled = true
             sender.setTitle("Change!", for: .normal)
         } else {
             nameTextField.isEnabled = false
             dateTextField.isEnabled = false
+            titleTextBar.isEnabled = false
             product.name = nameTextField.text
             product.launchDate = dateTextField.text
+            delegate?.changeTitleBar(titleTextBar.text!)
             sender.setTitle("Edit", for: .normal)
         }
     }
@@ -48,6 +60,7 @@ class DetailViewController: UIViewController {
         detailImageView.image = product.image
         nameTextField.text = product.name
         dateTextField.text = product.launchDate
+        titleTextBar.text = titleText
 
         // Do any additional setup after loading the view.
     }

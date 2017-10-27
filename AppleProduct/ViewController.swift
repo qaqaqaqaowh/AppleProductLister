@@ -10,12 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var titleBar: UINavigationItem!
+    
     @IBOutlet weak var tableView: UITableView!
+    
     let array = ["Macbook_Air","MacBook_with_Retina_Display","White_AppleWatch_with_Screen","IMac_vector.svg","190px-IPad_Mini_4_ClearPhoto"]
     var products : Array<Product> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        titleBar.title = "Apple Product List"
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -82,8 +87,15 @@ extension ViewController: UITableViewDelegate {
         let product = products[indexPath.row]
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         let vc = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+        vc.delegate = self
         vc.product = product
+        vc.titleText = titleBar.title!
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
+extension ViewController: changeTitleBarDelegate {
+    func changeTitleBar(_ string: String) {
+        titleBar.title = string
+    }
+}
